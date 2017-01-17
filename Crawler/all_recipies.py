@@ -62,6 +62,19 @@ class RecipeSpider(scrapy.Spider):
                                     span.css('::attr(class)').extract_first() == 'recipe-ingred_txt added':
                         recipe_ingredient_list.append(span.css('::text').extract_first())
 
+        # get the categories:
+        categories = []
+        uls = response.css('ul')
+        lis = None
+        for ul in uls:
+            if (ul.css('::attr(class)')):
+                if ('breadcrumbs' in ul.css('::attr(class)').extract_first()):
+                    lis = ul
+        if (lis):
+            for li in lis.css('li'):
+                categories.append(li.css('a').css('span').css('::text').extract_first().strip())
+
+
         # send the data to the json!
         yield {
             'url':url,
@@ -70,6 +83,7 @@ class RecipeSpider(scrapy.Spider):
             'recipe_review_count':recipe_review_count,
             'recipe_image_link':recipe_image_link,
             'recipe_ingredient_list':recipe_ingredient_list,
+            'categories':categories,
         }
 
 
@@ -83,7 +97,7 @@ class RecipeSpider(scrapy.Spider):
                         if response.urljoin(link.css('::attr(href)').extract_first()) not in self.visited_urls:
                             links.append(response.urljoin(link.css('::attr(href)').extract_first()))
 
-        time.sleep(2)
+        time.sleep(0.3)
         if len(links) > 0:
             for link in links:
                 yield scrapy.Request(link, callback=self.parse)
