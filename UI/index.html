@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spice It Up!</title>
+</head>
+<body>
+    <H1>Spice It Up!</H1>
+    <button id="startButton">
+        <H1>Let's get started!</H1>
+    </button>
+    <form id="ingredientsForm" onsubmit="formSubmitHandler(); return false;">
+        <ul id="form-list">
+            <li>
+                <label>Ingredient #1:</label>
+                <input class="awesomplete" id="ingredient1" placeholder="Type ingredient here"/>
+            </li>
+            <li>
+                <label>Ingredient #2:</label>
+                <input type="text" class="awesomplete"  id="ingredient2" placeholder="Type ingredient here"/>
+            </li>
+            <li>
+                <label>Ingredient #3:</label>
+                <input type="text" class="awesomplete"  id="ingredient3" placeholder="Type ingredient here"/>
+            </li>
+        </ul>
+        <ul class="form-buttons">
+            <li>
+                <label>Category:</label>
+                <select>
+                    <option value="I'm feeling spicy" selected="selected">I'm feeling spicy</option>
+                    <option value="Dinner">Dinner</option>
+                </select>
+            </li>
+            <li>
+                <button id="addIngredientInputButton">+</button>
+            </li>
+            <li>
+                <input type="submit" value="Submit"/>
+            </li>
+        </ul>
+    </form>
+    <script src="main.js" language="Javascript" type="text/javascript"></script>
+    <link rel="stylesheet" href="awesomplete.css" />
+    <script src="awesomplete.js" async></script>
+</body>
+</html>
