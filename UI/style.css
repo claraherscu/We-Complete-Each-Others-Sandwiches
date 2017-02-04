@@ -1,0 +1,192 @@
+body{
+    font-family: Georgia, "Times New Roman", Times, serif;
+}
+H1{
+    font-family: Georgia, "Times New Roman", Times, serif;
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+}
+#mainHeader{
+    color: #E67A0B;
+}
+
+ul{
+    list-style-type: none;
+}
+#ingredientsForm{
+    max-width: 500px;
+    padding: 10px 20px;
+    background: #f4f7f8;
+    margin: 10px auto;
+    padding: 20px;
+    background: #f4f7f8;
+    border-radius: 8px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+}
+#resultsTable{
+    overflow: scroll;
+    height: 500px;
+    width: 555px;
+    padding: 10px 20px;
+    background: #f4f7f8;
+    margin: 10px auto;
+    padding: 20px;
+    background: #f4f7f8;
+    border-radius: 8px;
+    font-family: Georgia, "Times New Roman", Times, serif;
+}
+#ingredientsForm fieldset{
+    border: none;
+}
+#ingredientsForm legend {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+}
+#ingredientsForm label {
+    display: block;
+    margin-bottom: 8px;
+}
+#ingredientsForm input[type="text"],
+#ingredientsForm input[type="date"],
+#ingredientsForm input[type="datetime"],
+#ingredientsForm input[type="email"],
+#ingredientsForm input[type="number"],
+#ingredientsForm input[type="search"],
+#ingredientsForm input[type="time"],
+#ingredientsForm input[type="url"],
+#ingredientsForm textarea,
+#ingredientsForm select {
+    font-family: Georgia, "Times New Roman", Times, serif;
+    background: rgba(255,255,255,.1);
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    margin: 0;
+    outline: 0;
+    padding: 7px;
+    width: 100%;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    background-color: #e8eeef;
+    color:#8a97a0;
+    -webkit-box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+    margin-bottom: 10px;
+
+}
+#ingredientsForm input[type="text"]:focus,
+#ingredientsForm input[type="date"]:focus,
+#ingredientsForm input[type="datetime"]:focus,
+#ingredientsForm input[type="email"]:focus,
+#ingredientsForm input[type="number"]:focus,
+#ingredientsForm input[type="search"]:focus,
+#ingredientsForm input[type="time"]:focus,
+#ingredientsForm input[type="url"]:focus,
+#ingredientsForm textarea:focus,
+#ingredientsForm select:focus{
+    background: #d2d9dd;
+}
+#ingredientsForm select{
+    -webkit-appearance: menulist-button;
+    height:35px;
+}
+#ingredientsForm .number {
+    background: #E39F1A;
+    color: #fff;
+    height: 30px;
+    width: 30px;
+    display: inline-block;
+    font-size: 0.8em;
+    margin-right: 4px;
+    line-height: 30px;
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+    border-radius: 15px 15px 15px 0px;
+}
+
+#ingredientsForm input[type="submit"],
+#ingredientsForm input[type="button"]
+{
+    position: relative;
+    display: block;
+    padding: 19px 39px 18px 39px;
+    color: #FFF;
+    margin: 0 auto;
+    background: #E39F1A;
+    font-size: 18px;
+    text-align: center;
+    font-style: normal;
+    width: 100%;
+    border: 1px solid #E67A0B;
+    border-width: 1px 1px 3px;
+    margin-bottom: 10px;
+}
+#ingredientsForm input[type="submit"]:hover,
+#ingredientsForm input[type="button"]:hover
+{
+    background: #E67A0B;
+}
+
+#backToSearch{
+    position: relative;
+    display: block;
+    padding: 8px 15px 8px 15px;
+    color: #FFF;
+    margin: 0 auto;
+    background: #E39F1A;
+    font-size: 18px;
+    text-align: center;
+    font-style: normal;
+    width: 100%;
+    border: 1px solid #E67A0B;
+    border-width: 1px 1px 3px;
+    margin-bottom: 10px;
+}
+
+#addIngredientInputButton{
+    position: relative;
+    display: block;
+    padding: 8px 15px 8px 15px;
+    color: #FFF;
+    margin: 0 auto;
+    background: #E39F1A;
+    font-size: 18px;
+    text-align: center;
+    font-style: normal;
+    width: 100%;
+    border: 1px solid #E67A0B;
+    border-width: 1px 1px 3px;
+    margin-bottom: 10px;
+}
+
+#startButton{
+    position: relative;
+    display: block;
+    padding: 19px 39px 18px 39px;
+    color: #FFF;
+    margin: 0 auto;
+    background: #E39F1A;
+    font-size: 18px;
+    text-align: center;
+    font-style: normal;
+    width: 100%;
+    border: 1px solid #E67A0B;
+    border-width: 1px 1px 3px;
+    margin-bottom: 10px;
+}
+
+#backToSearch:hover,
+#startButton:hover,
+#addIngredientInputButton:hover{
+    background: #E67A0B;
+}
+
+.recipeImage{
+    height: 70px;
+    width: 70px;
+}
+
+a{
+    color:#8a97a0;
+}

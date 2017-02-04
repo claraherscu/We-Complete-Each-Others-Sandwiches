@@ -3,17 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Spice It Up!</title>
+    <link rel="stylesheet" type="text/css" href='style.css'/>
 </head>
 <body>
-    <H1>Spice It Up!</H1>
+    <H1 id="mainHeader">Spice It Up!</H1>
+
     <button id="startButton">
         <H1>Let's get started!</H1>
     </button>
+
     <form id="ingredientsForm" onsubmit="formSubmitHandler(); return false;">
         <ul id="form-list">
             <li>
                 <label>Ingredient #1:</label>
-                <input class="awesomplete" id="ingredient1" placeholder="Type ingredient here"/>
+                <input type="text" class="awesomplete" id="ingredient1" placeholder="Type ingredient here"/>
             </li>
             <li>
                 <label>Ingredient #2:</label>
@@ -26,6 +29,9 @@
         </ul>
         <ul class="form-buttons">
             <li>
+                <button id="addIngredientInputButton">+</button>
+            </li>
+            <li>
                 <label>Category:</label>
                 <select>
                     <option value="I'm feeling spicy" selected="selected">I'm feeling spicy</option>
@@ -33,15 +39,15 @@
                 </select>
             </li>
             <li>
-                <button id="addIngredientInputButton">+</button>
-            </li>
-            <li>
-                <input type="submit" value="Submit"/>
+                <input type="submit" value="Search"/>
             </li>
         </ul>
     </form>
+
+    <div id="resultsDiv"></div>
+
+    <script src="awesomplete.js" async></script>
     <script src="main.js" language="Javascript" type="text/javascript"></script>
     <link rel="stylesheet" href="awesomplete.css" />
-    <script src="awesomplete.js" async></script>
 </body>
 </html>

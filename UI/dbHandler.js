@@ -1,2 +1,4 @@
-/* autocomplete handling */
-var tokens = ['tomato', 'potato'];
+
+
+
+expots.jsonObj = jsonObj;
