@@ -6,10 +6,10 @@
     <link rel="stylesheet" type="text/css" href='style.css'/>
 </head>
 <body>
-    <H1 id="mainHeader">Spice It Up!</H1>
+    <img src="computer-chef-with-title-aside.png" id="mainHeaderImg"/>
 
     <button id="startButton">
-        <H1>Let's get started!</H1>
+        <img src="computer-chef-with-title-on-top.png" id="startButtonImg"/>
     </button>
 
     <form id="ingredientsForm" onsubmit="formSubmitHandler(); return false;">
@@ -26,6 +26,14 @@
                 <label>Ingredient #3:</label>
                 <input type="text" class="awesomplete"  id="ingredient3" placeholder="Type ingredient here"/>
             </li>
+            <li>
+                <label>Ingredient #4:</label>
+                <input type="text" class="awesomplete" id="ingredient4" placeholder="Type ingredient here"/>
+            </li>
+            <li>
+                <label>Ingredient #5:</label>
+                <input type="text" class="awesomplete" id="ingredient5" placeholder="Type ingredient here"/>
+            </li>
         </ul>
         <ul class="form-buttons">
             <li>
@@ -35,7 +43,14 @@
                 <label>Category:</label>
                 <select>
                     <option value="I'm feeling spicy" selected="selected">I'm feeling spicy</option>
-                    <option value="Dinner">Dinner</option>
+                    <option value="Desert">Desert</option>
+                    <option value="Appetizers&Snacks">Appetizers&Snacks</option>
+                    <option value="Salad">Salad</option>
+                    <option value="Meat&Poultry">Meat&Poultry</option>
+                    <option value="Italian">Italian</option>
+                    <option value="Easy">Easy</option>
+                    <option value="Soup">Soup</option>
+                    <option value="Drinks">Drinks</option>
                 </select>
             </li>
             <li>

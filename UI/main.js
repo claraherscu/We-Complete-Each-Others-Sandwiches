@@ -1,3 +1,12 @@
+/* constants for the program */
+var OVERALL_INTEREST = 0;
+var RECIPE_SPECIFIC_INTEREST = 1;
+var RECIPE_NAMES = 2;
+var RECIPE_URLS = 3;
+var RECIPE_IMGS = 4;
+var NUM_INGREDIENTS_TO_DISPLAY = 4;
+
+
 /* reading data from jsonFile */
 function readTextFile(file){
     var allText;
@@ -17,12 +26,10 @@ function readTextFile(file){
 }
 
 var jsonText = readTextFile('association_rules.json');
+var tokens = ["bacon", "spinach", "parsley", "spray", "sherry", "carrot", "pineapple", "lime", "onions", "honey", "seasoning", "dill", "raisins", "paprika", "salt", "onion", "vanilla", "cornstarch", "scallions", "rosemary", "turmeric", "vodka", "garlic", "chives", "nutmeg", "ginger", "carrots", "flour", "ice", "margarine", "buttermilk", "half-and-half", "beef", "mustard", "cilantro", "cumin", "walnuts", "almonds", "pumpkin", "tarragon", "cream", "peas", "tomatoes", "mayonnaise", "chicken", "thyme", "lemon", "tomato", "molasses", "pepper", "butter", "apples", "shallots", "strawberries", "basil", "milk", "mushrooms", "allspice", "eggs", "almond", "parmesan", "orange", "bananas", "capers", "raspberries", "pork", "essence", "blueberries", "shallot", "cinnamon", "pecans", "sugar", "cayenne", "zucchini", "egg", "sage", "ketchup", "avocado", "cranberries", "potatoes", "shortening", "coriander", "oil", "celery", "cornmeal", "water", "oregano", "mint", "green onion", "yellow onion", "canola oil", "egg whites", "flat-leaf parsley", "parmesan cheese", "warm water", "garlic salt", "shrimp deveined", "orange juice", "red onion", "sea salt", "brown sugar", "stalks celery", "egg yolks", "baking soda", "chicken breasts", "black beans", "red wine", "chili powder", "tomato sauce", "stalk celery", "lean beef", "peanut oil", "whipping cream", "flour dusting", "egg yolk", "white onion", "sweet potatoes", "beef broth", "corn syrup", "rolled oats", "boiling water", "white pepper", "plain yogurt", "white rice", "confectioners sugar", "white vinegar", "stick butter", "mint leaves", "powdered sugar", "cilantro leaves", "whipped topping", "wheat flour", "hot sauce", "chicken stock", "balsamic vinegar", "tomato paste", "sour cream", "thyme leaves", "unsalted butter", "cream tartar", "green onions", "bread crumbs", "ginger root", "white wine", "black olives", "yellow onions", "garlic smashed", "black peppercorns", "active yeast", "rosemary leaves", "cider vinegar", "curry powder", "parsley leaves", "maple syrup", "cayenne pepper", "lime juice", "soy sauce", "vegetable oil", "cheddar cheese", "garlic powder", "dijon mustard", "lime juiced", "evaporated milk", "lemon juiced", "sesame oil", "juice lemon", "chicken broth", "bay leaves", "mozzarella cheese", "cream cheese", "bay leaf", "lemon juice", "chicken breast", "olive oil", "cherry tomatoes", "granulated sugar", "red pepper", "black pepper", "hot water", "rice vinegar", "pineapple juice", "baking powder", "coconut milk", "worcestershire sauce", "green beans", "onion powder", "salt pepper", "basil leaves", "white sugar", "peanut butter", "cracked black pepper", "white wine vinegar", "dark brown sugar", "low-sodium chicken broth", "red wine vinegar", "monterey jack cheese", "salt black pepper", "apple cider vinegar", "unsweetened cocoa powder", "semisweet chocolate chips", "sticks unsalted butter", "stick unsalted butter", "green bell pepper", "red bell pepper", "hot pepper sauce", "sweetened condensed milk", "distilled white vinegar", "squeezed lemon juice", "red pepper flakes", "extra-virgin olive oil", "rice wine vinegar", "extra virgin olive oil"];
+
 var jsonObj = JSON.parse(jsonText);
-
-
 /* handling autocomplete */
-var tokens = ['tomato', 'potato'];
-
 function addAutoComplete(inputFieldNum){
     var ing = document.getElementById('ingredient'+inputFieldNum);
     var thisAwesomplete = new Awesomplete(ing, {
@@ -35,17 +42,19 @@ function addAutoComplete(inputFieldNum){
 /* handling startButton */
 document.getElementById('ingredientsForm').style.visibility = 'hidden';
 document.getElementById('resultsDiv').style.visibility = 'hidden';
+document.getElementById('mainHeaderImg').style.visibility = 'hidden';
 var startButton = document.getElementById('startButton');
 startButton.onclick = function(){
     document.getElementById('ingredientsForm').style.visibility = 'visible';
-    for(var i = 1; i < 4; i++){
+    document.getElementById('mainHeaderImg').style.visibility = 'visible';
+    for(var i = 1; i < 6; i++){
         addAutoComplete(i);
     }
     startButton.style.display = 'none';
 };
 
 /* handling addition of extra ingredients to the form */
-var inputFieldsCounter = 4;
+var inputFieldsCounter = 6;
 
 var addInputButton = document.getElementById('addIngredientInputButton');
 addInputButton.onclick = function(){
@@ -86,12 +95,16 @@ function handleEmptyForm(){
     document.getElementById('resultsDiv').style.visibility = 'visible';
 
     // showing a message for the empty form
-    var table = document.getElementById('resultsTable');
+    var table = document.createElement('table');
+    table.setAttribute('id', 'resultsTable');
+    document.getElementById('resultsDiv').appendChild(table);
     var row = document.createElement('tr');
     table.appendChild(row);
     var col = document.createElement('td');
     row.appendChild(col);
-    col.innerHTML = 'Please give us a clue! add at least one ingredient to the search';
+    var bold = document.createElement('b');
+    bold.innerHTML = 'Please give us a clue! add at least one ingredient to the search';
+    col.appendChild(bold);
     var row2 = document.createElement('tr');
     table.appendChild(row2);
     var col2 = document.createElement('td');
@@ -105,6 +118,7 @@ function handleEmptyForm(){
         document.getElementById('resultsDiv').style.visibility = 'hidden';
         table.removeChild(row);
         table.removeChild(row2);
+        document.getElementById('resultsDiv').removeChild(table);
     };
     col2.appendChild(backToSearchButton);
 
@@ -120,7 +134,6 @@ function getStringFromIngsList(sortedX){
     }
     return XString;
 }
-
 
 function getIngredientsToAdd(ingredientsList){
     // iterating over all ingredients and the association rules that can be related to them
@@ -150,13 +163,14 @@ function getIngredientsToAdd(ingredientsList){
                 recipeImg = allRules[ruleNum][4];
 
                 if(ingsToAdd.hasOwnProperty(y)){
-                    ingsToAdd[y][0] += interest;
-                    ingsToAdd[y][1] = recipeName;
-                    ingsToAdd[y][2] = recipeUrl;
-                    ingsToAdd[y][3] = recipeImg;
+                    ingsToAdd[y][OVERALL_INTEREST] += interest;
+                    ingsToAdd[y][RECIPE_SPECIFIC_INTEREST].push(interest);
+                    ingsToAdd[y][RECIPE_NAMES].push(recipeName);
+                    ingsToAdd[y][RECIPE_URLS].push(recipeUrl);
+                    ingsToAdd[y][RECIPE_IMGS].push(recipeImg);
                 }
                 else{
-                    ingsToAdd[y] = [interest, recipeName, recipeUrl, recipeImg];
+                    ingsToAdd[y] = [interest, [interest], [recipeName], [recipeUrl], [recipeImg]];
                 }
             }
         }
@@ -179,14 +193,15 @@ function getIngredientsToAdd(ingredientsList){
                     recipeName = allRules[ruleNum][2];
                     recipeUrl = allRules[ruleNum][3];
                     recipeImg = allRules[ruleNum][4];
-                    if (ingsToAdd.hasOwnProperty(y)) {
-                        ingsToAdd[y][0] += interest;
-                        ingsToAdd[y][1] = recipeName;
-                        ingsToAdd[y][2] = recipeUrl;
-                        ingsToAdd[y][3] = recipeImg;
+                    if(ingsToAdd.hasOwnProperty(y)){
+                        ingsToAdd[y][OVERALL_INTEREST] += interest;
+                        ingsToAdd[y][RECIPE_SPECIFIC_INTEREST].push(interest);
+                        ingsToAdd[y][RECIPE_NAMES].push(recipeName);
+                        ingsToAdd[y][RECIPE_URLS].push(recipeUrl);
+                        ingsToAdd[y][RECIPE_IMGS].push(recipeImg);
                     }
-                    else {
-                        ingsToAdd[y] = [interest, recipeName, recipeUrl, recipeImg];
+                    else{
+                        ingsToAdd[y] = [interest, [interest], [recipeName], [recipeUrl], [recipeImg]];
                     }
                 }
             }
@@ -209,14 +224,15 @@ function getIngredientsToAdd(ingredientsList){
                         recipeName = allRules[ruleNum][2];
                         recipeUrl = allRules[ruleNum][3];
                         recipeImg = allRules[ruleNum][4];
-                        if (ingsToAdd.hasOwnProperty(y)) {
-                            ingsToAdd[y][0] += interest;
-                            ingsToAdd[y][1] = recipeName;
-                            ingsToAdd[y][2] = recipeUrl;
-                            ingsToAdd[y][3] = recipeImg;
+                        if(ingsToAdd.hasOwnProperty(y)){
+                            ingsToAdd[y][OVERALL_INTEREST] += interest;
+                            ingsToAdd[y][RECIPE_SPECIFIC_INTEREST].push(interest);
+                            ingsToAdd[y][RECIPE_NAMES].push(recipeName);
+                            ingsToAdd[y][RECIPE_URLS].push(recipeUrl);
+                            ingsToAdd[y][RECIPE_IMGS].push(recipeImg);
                         }
-                        else {
-                            ingsToAdd[y] = [interest, recipeName, recipeUrl, recipeImg];
+                        else{
+                            ingsToAdd[y] = [interest, [interest], [recipeName], [recipeUrl], [recipeImg]];
                         }
                     }
                 }
@@ -227,6 +243,85 @@ function getIngredientsToAdd(ingredientsList){
         X.pop();
     }
     return ingsToAdd;
+}
+
+function getBestRelevantRecipe(alreadyShownRecipeUrls, ingsToAdd, currIng){
+    var currDetails = ingsToAdd[currIng];
+    var numRecipes = currDetails[RECIPE_SPECIFIC_INTEREST].length;
+
+    var maxInterest = -1;
+    var maxInterestsIndex = -1;
+    var maxInterestNotShown = -1;
+    var maxInterestsIndexNotShown = -1;
+    // iterating over all relevant recipes to find the one with most interest that is not already shown
+    for (var recipeNum = 0; recipeNum < numRecipes; recipeNum++){
+        if(currDetails[RECIPE_SPECIFIC_INTEREST][recipeNum] > maxInterest){
+            maxInterest = currDetails[RECIPE_SPECIFIC_INTEREST][recipeNum];
+            maxInterestsIndex = recipeNum;
+            if (!(alreadyShownRecipeUrls.includes(currDetails[RECIPE_URLS][recipeNum]))){
+                maxInterestNotShown = currDetails[RECIPE_SPECIFIC_INTEREST][recipeNum];
+                maxInterestsIndexNotShown = recipeNum;
+            }
+        }
+
+    }
+
+    // if we didn't find anything that wasn't already shown, we will return the to interest one.
+    if(maxInterestsIndexNotShown === -1){
+        return maxInterestsIndex;
+    }
+    else{
+        return maxInterestsIndexNotShown;
+    }
+}
+
+function addIngredientRowToResults(ingredient, ingsToAdd, table){
+    var ingredientRow, ingredientCol, recipeSpan, recipeCol;
+    var innerTable, innerRow, innerCol1, innerCol2, recipeImg, recipeUrl;
+    var alreadyShownRecipeUrls = [];
+    var recipeNumToShow;
+
+    ingredientRow = document.createElement('tr');
+    table.appendChild(ingredientRow);
+    ingredientCol = document.createElement('td');
+    ingredientRow.appendChild(ingredientCol);
+
+    ingredientCol.innerHTML = ingredient;
+
+    recipeCol = document.createElement('td');
+    recipeSpan = document.createElement('span');
+    recipeCol.appendChild(recipeSpan);
+    recipeSpan.setAttribute('class', 'popupRecipe');
+    ingredientRow.appendChild(recipeCol);
+
+    innerTable = document.createElement('table');
+    recipeSpan.appendChild(innerTable);
+    innerRow = document.createElement('tr');
+    innerTable.appendChild(innerRow);
+
+    // choosing most relevant recipe to display
+    recipeNumToShow = getBestRelevantRecipe(alreadyShownRecipeUrls, ingsToAdd, ingredient);
+
+    // image
+    innerCol1 = document.createElement('td');
+    innerRow.appendChild(innerCol1);
+    recipeImg = document.createElement('img');
+    recipeImg.setAttribute('class', 'recipeImage');
+    if(ingsToAdd[ingredient][RECIPE_IMGS][recipeNumToShow] === ''){
+        recipeImg.setAttribute('src', 'default-recipe.png');
+    }
+    else{
+        recipeImg.setAttribute('src', ingsToAdd[ingredient][RECIPE_IMGS][recipeNumToShow]);
+    }
+    innerCol1.appendChild(recipeImg);
+
+    // recipe name and url
+    innerCol2 = document.createElement('td');
+    recipeUrl = document.createElement('a');
+    recipeUrl.setAttribute('href', ingsToAdd[ingredient][RECIPE_URLS][recipeNumToShow]);
+    recipeUrl.innerHTML = ingsToAdd[ingredient][RECIPE_NAMES][recipeNumToShow];
+    innerCol2.appendChild(recipeUrl);
+    innerRow.appendChild(innerCol2);
 }
 
 function handleNonEmptyForm(ingredientsList){
@@ -249,7 +344,10 @@ function handleNonEmptyForm(ingredientsList){
         col = document.createElement('td');
         col.setAttribute('colspan','2');
         row.appendChild(col);
-        col.innerHTML = 'We found nothing to add. Your recipe is probably already AWESOME!';
+
+        var bold = document.createElement('b');
+        bold.innerHTML = 'We found nothing to add. Your recipe is probably already AWESOME!';
+        col.appendChild(bold);
     }
     else{
         row = document.createElement('tr');
@@ -257,54 +355,52 @@ function handleNonEmptyForm(ingredientsList){
         col = document.createElement('td');
         col.setAttribute('colspan','2');
         row.appendChild(col);
-        col.innerHTML = 'We think it would be cool to add one (or more) of the following:';
+        var bold = document.createElement('b');
+        bold.innerHTML = 'We think it would be cool to add one (or more) of the following:';
+        col.appendChild(bold);
 
-        var ingredientRow, ingredientCol, recipeSpan, recipeCol;
-        var innerTable, innerRow, innerCol1, innerCol2, recipeImg, recipeUrl;
+        var numIngredientsShown = 0;
         for(var ingredient in ingsToAdd){
-            ingredientRow = document.createElement('tr');
-            table.appendChild(ingredientRow);
-            ingredientCol = document.createElement('td');
-            ingredientRow.appendChild(ingredientCol);
-
-            ingredientCol.innerHTML = ingredient;
-
-            recipeCol = document.createElement('td');
-            recipeSpan = document.createElement('span');
-            recipeCol.appendChild(recipeSpan);
-            recipeSpan.setAttribute('class', 'popupRecipe');
-            ingredientRow.appendChild(recipeCol);
-
-            innerTable = document.createElement('table');
-            recipeSpan.appendChild(innerTable);
-            innerRow = document.createElement('tr');
-            innerTable.appendChild(innerRow);
-
-            // image
-            innerCol1 = document.createElement('td');
-            innerRow.appendChild(innerCol1);
-            recipeImg = document.createElement('img');
-            recipeImg.setAttribute('class', 'recipeImage');
-            if(ingsToAdd[ingredient][3] === ''){
-                recipeImg.setAttribute('src', 'default-recipe.png');
+            if(numIngredientsShown === NUM_INGREDIENTS_TO_DISPLAY){
+                break;
             }
-            else{
-                recipeImg.setAttribute('src', ingsToAdd[ingredient][3]);
-            }
-            innerCol1.appendChild(recipeImg);
-
-            // recipe name and url
-            innerCol2 = document.createElement('td');
-            recipeUrl = document.createElement('a');
-            recipeUrl.setAttribute('href', ingsToAdd[ingredient][2]);
-            recipeUrl.innerHTML = ingsToAdd[ingredient][1];
-            innerCol2.appendChild(recipeUrl);
-            innerRow.appendChild(innerCol2);
+            addIngredientRowToResults(ingredient, ingsToAdd, table);
+            numIngredientsShown++;
         }
     }
 
-    // last row: button
+    // button for adding extra ingredients to the results
+    var showMoreRow = document.createElement('tr');
+    showMoreRow.setAttribute('id', 'showMoreRow');
+    table.appendChild(showMoreRow);
+    var showMoreCol = document.createElement('td');
+    showMoreCol.setAttribute('colspan', '2');
+    showMoreRow.appendChild(showMoreCol);
+    var showMoreButton = document.createElement('button');
+    showMoreButton.setAttribute('id', 'showMoreButton');
+    showMoreButton.innerHTML = 'Show me more...';
+    showMoreButton.onclick = function () {
+        var ingredientNum = 0;
+        var showMore = document.getElementById('showMoreRow');
+        var last = document.getElementById('lastRow');
+        var startShowing = numIngredientsShown;
+        table.removeChild(showMore);
+        table.removeChild(last);
+        for(var ingredient in ingsToAdd){
+            if(ingredientNum >= startShowing && ingredientNum <= (startShowing + 1)){
+                addIngredientRowToResults(ingredient, ingsToAdd, table);
+                numIngredientsShown++;
+            }
+            ingredientNum++;
+        }
+        table.appendChild(showMore);
+        table.appendChild(last);
+    };
+    showMoreCol.appendChild(showMoreButton);
+
+    // last row: back to search button
     var lastRow = document.createElement('tr');
+    lastRow.setAttribute('id', 'lastRow');
     table.appendChild(lastRow);
     var buttonCol = document.createElement('td');
     buttonCol.setAttribute('colspan','2');
@@ -312,7 +408,6 @@ function handleNonEmptyForm(ingredientsList){
     var backToSearchButton = document.createElement('button');
     backToSearchButton.setAttribute('id', 'backToSearch');
     backToSearchButton.innerHTML = 'Back to search';
-    // var backToSearchButton = document.getElementById('backToSearch');
     backToSearchButton.onclick = function(){
         document.getElementById('ingredientsForm').style.display = 'block';
         document.getElementById('resultsDiv').style.visibility = 'hidden';

@@ -1,5 +1,13 @@
+#mainHeaderImg{
+    height: 145px;
+    position: relative;
+    left: 31%;
+    border-radius: 8px;
+}
+
 body{
     font-family: Georgia, "Times New Roman", Times, serif;
+    background: #292426;
 }
 H1{
     font-family: Georgia, "Times New Roman", Times, serif;
@@ -7,7 +15,7 @@ H1{
     text-shadow: 0 1px 0 rgba(255,255,255,0.2);
 }
 #mainHeader{
-    color: #E67A0B;
+    color: #292426;
 }
 
 ul{
@@ -142,8 +150,10 @@ ul{
     border: 1px solid #E67A0B;
     border-width: 1px 1px 3px;
     margin-bottom: 10px;
+    border-radius: 8px;
 }
 
+#showMoreButton,
 #addIngredientInputButton{
     position: relative;
     display: block;
@@ -154,28 +164,30 @@ ul{
     font-size: 18px;
     text-align: center;
     font-style: normal;
-    width: 100%;
+    width: 70%;
     border: 1px solid #E67A0B;
     border-width: 1px 1px 3px;
     margin-bottom: 10px;
+    border-radius: 8px;
 }
 
 #startButton{
     position: relative;
     display: block;
-    padding: 19px 39px 18px 39px;
+    /*padding: 19px 39px 18px 39px;*/
     color: #FFF;
     margin: 0 auto;
     background: #E39F1A;
     font-size: 18px;
     text-align: center;
     font-style: normal;
-    width: 100%;
+    /*width: 100%;*/
     border: 1px solid #E67A0B;
     border-width: 1px 1px 3px;
-    margin-bottom: 10px;
+    border-radius: 8px;
 }
 
+#showMoreButton:hover,
 #backToSearch:hover,
 #startButton:hover,
 #addIngredientInputButton:hover{
@@ -190,3 +202,4 @@ ul{
 a{
     color:#8a97a0;
 }
+
