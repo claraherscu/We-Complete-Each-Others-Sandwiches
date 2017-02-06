@@ -5,7 +5,23 @@ var RECIPE_NAMES = 2;
 var RECIPE_URLS = 3;
 var RECIPE_IMGS = 4;
 var NUM_INGREDIENTS_TO_DISPLAY = 4;
+var PATH_FOR_JSONS = 'association_rules/';
+var JSON_ALL = 'all_association_rules.json';
+var JSON_APPETIZERS = 'appetizers_association_rules.json';
+var JSON_DESERTS = 'deserts_association_rules.json';
+var JSON_DRINKS = 'drinks_association_rules.json';
+var JSON_EASY = 'easy_association_rules.json';
+var JSON_ITALIAN = 'italian_association_rules.json';
+var JSON_MEAT = 'meat_and_poultry_association_rules.json';
+var JSON_SALAD = 'salad_association_rules.json';
+var JSON_SOUP = 'soups_stews_chili_association_rules.json';
 
+var jsonObj; //to be filled later with the relevant path
+
+/* setting display */
+document.getElementById('ingredientsForm').style.visibility = 'hidden';
+document.getElementById('resultsDiv').style.visibility = 'hidden';
+document.getElementById('mainHeaderImg').style.visibility = 'hidden';
 
 /* reading data from jsonFile */
 function readTextFile(file){
@@ -25,10 +41,8 @@ function readTextFile(file){
     return allText;
 }
 
-var jsonText = readTextFile('association_rules.json');
 var tokens = ["bacon", "spinach", "parsley", "spray", "sherry", "carrot", "pineapple", "lime", "onions", "honey", "seasoning", "dill", "raisins", "paprika", "salt", "onion", "vanilla", "cornstarch", "scallions", "rosemary", "turmeric", "vodka", "garlic", "chives", "nutmeg", "ginger", "carrots", "flour", "ice", "margarine", "buttermilk", "half-and-half", "beef", "mustard", "cilantro", "cumin", "walnuts", "almonds", "pumpkin", "tarragon", "cream", "peas", "tomatoes", "mayonnaise", "chicken", "thyme", "lemon", "tomato", "molasses", "pepper", "butter", "apples", "shallots", "strawberries", "basil", "milk", "mushrooms", "allspice", "eggs", "almond", "parmesan", "orange", "bananas", "capers", "raspberries", "pork", "essence", "blueberries", "shallot", "cinnamon", "pecans", "sugar", "cayenne", "zucchini", "egg", "sage", "ketchup", "avocado", "cranberries", "potatoes", "shortening", "coriander", "oil", "celery", "cornmeal", "water", "oregano", "mint", "green onion", "yellow onion", "canola oil", "egg whites", "flat-leaf parsley", "parmesan cheese", "warm water", "garlic salt", "shrimp deveined", "orange juice", "red onion", "sea salt", "brown sugar", "stalks celery", "egg yolks", "baking soda", "chicken breasts", "black beans", "red wine", "chili powder", "tomato sauce", "stalk celery", "lean beef", "peanut oil", "whipping cream", "flour dusting", "egg yolk", "white onion", "sweet potatoes", "beef broth", "corn syrup", "rolled oats", "boiling water", "white pepper", "plain yogurt", "white rice", "confectioners sugar", "white vinegar", "stick butter", "mint leaves", "powdered sugar", "cilantro leaves", "whipped topping", "wheat flour", "hot sauce", "chicken stock", "balsamic vinegar", "tomato paste", "sour cream", "thyme leaves", "unsalted butter", "cream tartar", "green onions", "bread crumbs", "ginger root", "white wine", "black olives", "yellow onions", "garlic smashed", "black peppercorns", "active yeast", "rosemary leaves", "cider vinegar", "curry powder", "parsley leaves", "maple syrup", "cayenne pepper", "lime juice", "soy sauce", "vegetable oil", "cheddar cheese", "garlic powder", "dijon mustard", "lime juiced", "evaporated milk", "lemon juiced", "sesame oil", "juice lemon", "chicken broth", "bay leaves", "mozzarella cheese", "cream cheese", "bay leaf", "lemon juice", "chicken breast", "olive oil", "cherry tomatoes", "granulated sugar", "red pepper", "black pepper", "hot water", "rice vinegar", "pineapple juice", "baking powder", "coconut milk", "worcestershire sauce", "green beans", "onion powder", "salt pepper", "basil leaves", "white sugar", "peanut butter", "cracked black pepper", "white wine vinegar", "dark brown sugar", "low-sodium chicken broth", "red wine vinegar", "monterey jack cheese", "salt black pepper", "apple cider vinegar", "unsweetened cocoa powder", "semisweet chocolate chips", "sticks unsalted butter", "stick unsalted butter", "green bell pepper", "red bell pepper", "hot pepper sauce", "sweetened condensed milk", "distilled white vinegar", "squeezed lemon juice", "red pepper flakes", "extra-virgin olive oil", "rice wine vinegar", "extra virgin olive oil"];
 
-var jsonObj = JSON.parse(jsonText);
 /* handling autocomplete */
 function addAutoComplete(inputFieldNum){
     var ing = document.getElementById('ingredient'+inputFieldNum);
@@ -40,9 +54,6 @@ function addAutoComplete(inputFieldNum){
 }
 
 /* handling startButton */
-document.getElementById('ingredientsForm').style.visibility = 'hidden';
-document.getElementById('resultsDiv').style.visibility = 'hidden';
-document.getElementById('mainHeaderImg').style.visibility = 'hidden';
 var startButton = document.getElementById('startButton');
 startButton.onclick = function(){
     document.getElementById('ingredientsForm').style.visibility = 'visible';
@@ -88,6 +99,50 @@ function getElementsSubmitted(submittedForm){
         }
     }
     return {_count: count, _validElements: validElements};
+}
+
+function getRelevantJson(){
+    var fileToRead = PATH_FOR_JSONS;
+    // determine which file to read
+    var categorieSelector = document.getElementById('categorySelect');
+    var submittedCategory = categorieSelector.options[categorieSelector.selectedIndex].value;
+    // alert(submittedCategory);
+    switch (submittedCategory){
+        case "I'm feeling spicy":
+            fileToRead += JSON_ALL;
+            break;
+        case "Desert":
+            fileToRead += JSON_DESERTS;
+            break;
+        case "Appetizers&Snacks":
+            fileToRead += JSON_APPETIZERS;
+            break;
+        case "Salad":
+            fileToRead += JSON_SALAD;
+            break;
+        case "Meat&Poultry":
+            fileToRead += JSON_MEAT;
+            break;
+        case "Italian":
+            fileToRead += JSON_ITALIAN;
+            break;
+        case "Easy":
+            fileToRead += JSON_EASY;
+            break;
+        case "Soup":
+            fileToRead += JSON_SOUP;
+            break;
+        case "Drinks":
+            fileToRead += JSON_DRINKS;
+            break;
+        default:
+            fileToRead += JSON_ALL;
+            break;
+    }
+
+    // reading file
+    var jsonText = readTextFile(fileToRead);
+    jsonObj = JSON.parse(jsonText);
 }
 
 function handleEmptyForm(){
@@ -420,6 +475,7 @@ function handleNonEmptyForm(ingredientsList){
 function formSubmitHandler(){
     var submittedForm = document.getElementById('ingredientsForm');
     var submittedElems = getElementsSubmitted(submittedForm);
+    getRelevantJson();
 
     if(submittedElems._count === 0){
         handleEmptyForm();
