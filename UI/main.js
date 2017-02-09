@@ -5,7 +5,6 @@ var RECIPE_NAMES = 2;
 var RECIPE_URLS = 3;
 var RECIPE_IMGS = 4;
 var NUM_INGREDIENTS_TO_DISPLAY = 4;
-var PATH_FOR_JSONS = 'association_rules/';
 var JSON_ALL = 'all_association_rules.json';
 var JSON_APPETIZERS = 'appetizers_association_rules.json';
 var JSON_DESERTS = 'deserts_association_rules.json';
@@ -102,7 +101,7 @@ function getElementsSubmitted(submittedForm){
 }
 
 function getRelevantJson(){
-    var fileToRead = PATH_FOR_JSONS;
+    var fileToRead = "";
     // determine which file to read
     var categorieSelector = document.getElementById('categorySelect');
     var submittedCategory = categorieSelector.options[categorieSelector.selectedIndex].value;
@@ -297,11 +296,20 @@ function getIngredientsToAdd(ingredientsList){
         }
         X.pop();
     }
-    return ingsToAdd;
+
+    var sortedIngsToAdd = [];
+    for (var ing in ingsToAdd)
+        sortedIngsToAdd.push([ing, ingsToAdd[ing]])
+
+    sortedIngsToAdd.sort(function(a, b) {
+        return a[1][OVERALL_INTEREST] - b[1][OVERALL_INTEREST];
+    }).reverse();
+
+    return sortedIngsToAdd;
 }
 
 function getBestRelevantRecipe(alreadyShownRecipeUrls, ingsToAdd, currIng){
-    var currDetails = ingsToAdd[currIng];
+    var currDetails = ingsToAdd[currIng][1];
     var numRecipes = currDetails[RECIPE_SPECIFIC_INTEREST].length;
 
     var maxInterest = -1;
@@ -330,7 +338,7 @@ function getBestRelevantRecipe(alreadyShownRecipeUrls, ingsToAdd, currIng){
     }
 }
 
-function addIngredientRowToResults(ingredient, ingsToAdd, table){
+function addIngredientRowToResults(ingredientName, ingredient, ingsToAdd, table){
     var ingredientRow, ingredientCol, recipeSpan, recipeCol;
     var innerTable, innerRow, innerCol1, innerCol2, recipeImg, recipeUrl;
     var alreadyShownRecipeUrls = [];
@@ -341,7 +349,7 @@ function addIngredientRowToResults(ingredient, ingsToAdd, table){
     ingredientCol = document.createElement('td');
     ingredientRow.appendChild(ingredientCol);
 
-    ingredientCol.innerHTML = ingredient;
+    ingredientCol.innerHTML = ingredientName;
 
     recipeCol = document.createElement('td');
     recipeSpan = document.createElement('span');
@@ -362,19 +370,19 @@ function addIngredientRowToResults(ingredient, ingsToAdd, table){
     innerRow.appendChild(innerCol1);
     recipeImg = document.createElement('img');
     recipeImg.setAttribute('class', 'recipeImage');
-    if(ingsToAdd[ingredient][RECIPE_IMGS][recipeNumToShow] === ''){
+    if(ingsToAdd[ingredient][1][RECIPE_IMGS][recipeNumToShow] === ''){
         recipeImg.setAttribute('src', 'default-recipe.png');
     }
     else{
-        recipeImg.setAttribute('src', ingsToAdd[ingredient][RECIPE_IMGS][recipeNumToShow]);
+        recipeImg.setAttribute('src', ingsToAdd[ingredient][1][RECIPE_IMGS][recipeNumToShow]);
     }
     innerCol1.appendChild(recipeImg);
 
     // recipe name and url
     innerCol2 = document.createElement('td');
     recipeUrl = document.createElement('a');
-    recipeUrl.setAttribute('href', ingsToAdd[ingredient][RECIPE_URLS][recipeNumToShow]);
-    recipeUrl.innerHTML = ingsToAdd[ingredient][RECIPE_NAMES][recipeNumToShow];
+    recipeUrl.setAttribute('href', ingsToAdd[ingredient][1][RECIPE_URLS][recipeNumToShow]);
+    recipeUrl.innerHTML = ingsToAdd[ingredient][1][RECIPE_NAMES][recipeNumToShow];
     innerCol2.appendChild(recipeUrl);
     innerRow.appendChild(innerCol2);
 }
@@ -382,7 +390,7 @@ function addIngredientRowToResults(ingredient, ingsToAdd, table){
 function handleNonEmptyForm(ingredientsList){
     // getting dictionary of all possible ingredients to add
     // the value for each ingredient is the sum of interests of the association rules it appeared in
-    var ingsToAdd = getIngredientsToAdd(ingredientsList);
+    var sortedIngsToAdd = getIngredientsToAdd(ingredientsList);
 
     // displaying results
     document.getElementById('ingredientsForm').style.display = 'none';
@@ -391,16 +399,16 @@ function handleNonEmptyForm(ingredientsList){
     var table = document.createElement('table');
     table.setAttribute('id', 'resultsTable');
     document.getElementById('resultsDiv').appendChild(table);
-    var row, col;
+    var row, col, bold;
     // if no results were found
-    if (Object.keys(ingsToAdd).length === 0){
+    if (sortedIngsToAdd.length === 0){
         row = document.createElement('tr');
         table.appendChild(row);
         col = document.createElement('td');
         col.setAttribute('colspan','2');
         row.appendChild(col);
 
-        var bold = document.createElement('b');
+        bold = document.createElement('b');
         bold.innerHTML = 'We found nothing to add. Your recipe is probably already AWESOME!';
         col.appendChild(bold);
     }
@@ -410,16 +418,16 @@ function handleNonEmptyForm(ingredientsList){
         col = document.createElement('td');
         col.setAttribute('colspan','2');
         row.appendChild(col);
-        var bold = document.createElement('b');
+        bold = document.createElement('b');
         bold.innerHTML = 'We think it would be cool to add one (or more) of the following:';
         col.appendChild(bold);
 
         var numIngredientsShown = 0;
-        for(var ingredient in ingsToAdd){
+        for(var ix = 0; ix < sortedIngsToAdd.length; ix++){
             if(numIngredientsShown === NUM_INGREDIENTS_TO_DISPLAY){
                 break;
             }
-            addIngredientRowToResults(ingredient, ingsToAdd, table);
+            addIngredientRowToResults(sortedIngsToAdd[ix][0], ix, sortedIngsToAdd, table);
             numIngredientsShown++;
         }
     }
@@ -435,18 +443,17 @@ function handleNonEmptyForm(ingredientsList){
     showMoreButton.setAttribute('id', 'showMoreButton');
     showMoreButton.innerHTML = 'Show me more...';
     showMoreButton.onclick = function () {
-        var ingredientNum = 0;
+
         var showMore = document.getElementById('showMoreRow');
         var last = document.getElementById('lastRow');
         var startShowing = numIngredientsShown;
         table.removeChild(showMore);
         table.removeChild(last);
-        for(var ingredient in ingsToAdd){
+        for(var ingredientNum = 0; ingredientNum < sortedIngsToAdd.length; ingredientNum++){
             if(ingredientNum >= startShowing && ingredientNum <= (startShowing + 1)){
-                addIngredientRowToResults(ingredient, ingsToAdd, table);
+                addIngredientRowToResults(sortedIngsToAdd[ingredientNum][0], ingredientNum, sortedIngsToAdd, table);
                 numIngredientsShown++;
             }
-            ingredientNum++;
         }
         table.appendChild(showMore);
         table.appendChild(last);

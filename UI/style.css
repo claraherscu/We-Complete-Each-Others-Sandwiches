@@ -118,17 +118,19 @@ ul{
 {
     position: relative;
     display: block;
-    padding: 19px 39px 18px 39px;
+    padding: 10px 30px 10px 30px;
     color: #FFF;
-    margin: 0 auto;
+    margin: 0;
     background: #E39F1A;
     font-size: 18px;
     text-align: center;
+    font-family: Georgia, "Times New Roman", Times, serif;
     font-style: normal;
-    width: 100%;
+    width: 50%;
     border: 1px solid #E67A0B;
     border-width: 1px 1px 3px;
     margin-bottom: 10px;
+    border-radius: 5px;
 }
 #ingredientsForm input[type="submit"]:hover,
 #ingredientsForm input[type="button"]:hover
@@ -141,8 +143,9 @@ ul{
     display: block;
     padding: 8px 15px 8px 15px;
     color: #FFF;
-    margin: 0 auto;
+    margin: 0;
     background: #E39F1A;
+    font-family: Georgia, "Times New Roman", Times, serif;
     font-size: 18px;
     text-align: center;
     font-style: normal;
@@ -150,7 +153,7 @@ ul{
     border: 1px solid #E67A0B;
     border-width: 1px 1px 3px;
     margin-bottom: 10px;
-    border-radius: 8px;
+    border-radius: 5px;
 }
 
 #showMoreButton,
@@ -159,16 +162,17 @@ ul{
     display: block;
     padding: 8px 15px 8px 15px;
     color: #FFF;
-    margin: 0 auto;
+    margin: 0;
     background: #E39F1A;
+    font-family: Georgia, "Times New Roman", Times, serif;
     font-size: 18px;
     text-align: center;
     font-style: normal;
-    width: 70%;
+    width: 35%;
     border: 1px solid #E67A0B;
     border-width: 1px 1px 3px;
     margin-bottom: 10px;
-    border-radius: 8px;
+    border-radius: 5px;
 }
 
 #startButton{
